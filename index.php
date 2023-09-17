@@ -2,11 +2,13 @@
 
 require('./Cafe.php');
 
-
 function callAPI($method, $url, $data)
 {
-    $login = 'test-author';
-    $password = 'nyLT ZAce XiF2 KCNQ rcLB xYHg';
+    /**
+     * @var $login
+     * @var $password
+     */
+    require('./env.php');
 
     $curl = curl_init();
     switch ($method) {
