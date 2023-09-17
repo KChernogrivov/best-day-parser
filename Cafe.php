@@ -2,28 +2,28 @@
 
 class Cafe
 {
-    private int $id;
-    private string $name;
-    private string $description;
-    private string $address;
-    private string $work_hours = '';
-    private string $average_price;
-    private string $contact;
+    public int $id;
+    public string $title;
+    public string $description;
+    public string $address;
+    public string $work_hours = '';
+    public int $average_price;
+    public string $contact;
 
     public function __construct(array $item)
     {
         $this->id = $item['id'];
         $this->description = $item['ads']['article'];
-        $this->name = $item['name'];
+        $this->title = $item['name'];
         $this->address = $item['address_name'] . (array_key_exists('address_comment', $item) ? ', ' . $item['address_comment'] : '');
-        $this->average_price = $item['context']['stop_factors'][0]['name'];
+        $this->average_price = preg_replace('/[^0-9]/', '', $item['context']['stop_factors'][0]['name']);
         $this->setContact($item['ads']['options']['actions'][0]);
         $this->setWorkHours($item['schedule']);
     }
 
     private function setContact(array $contact): bool
     {
-        $link = $contact['type'] === 'phone' ? "tel:{$contact['value']}" : (string)$contact['value'];
+        $link = $contact['type'] == 'phone' ? "tel:{$contact['value']}" : (string)$contact['value'];
 
         return $this->contact = "<a href='{$link}'>{$contact['caption']}</a>";
     }
@@ -41,7 +41,7 @@ class Cafe
         ];
 
         foreach ($week as $key => $day) {
-            $this->work_hours .= "{$day}: {$shedule[$key]['working_hours'][0]['from']} - {$shedule[$key]['working_hours'][0]['to']} ";
+            $this->work_hours .= "<p>{$day}: {$shedule[$key]['working_hours'][0]['from']} - {$shedule[$key]['working_hours'][0]['to']}</p>";
         }
     }
 }
