@@ -92,6 +92,12 @@ foreach ($response['result']['items'] as $item) {
 echo "</pre>";
 
 
+function createPost(string $title, string $content, string $status, array $categories, string $image, stdClass $acf)
+{
+
+}
+
+
 
 
 
