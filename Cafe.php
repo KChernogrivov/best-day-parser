@@ -2,30 +2,40 @@
 
 class Cafe
 {
-    public int $id;
     public string $title;
-    public string $description;
     public string $address;
     public string $work_hours = '';
     public int $average_price;
-    public string $contact;
+    public string $content;
+    public string $date_start;
 
-    public function __construct(array $item)
+    public string $date_finish;
+    public string $time_start = '10:00';
+    public string $time_finish = '19:00';
+    public string $emotions = 'Один\nС детьми\nС родителями\nС компанией\nС другом/подругой';
+    public array $categories = [10];
+    public string $featured_image;
+
+    public function __construct(array $item, string $fifu_image_url)
     {
-        $this->id = $item['id'];
-        $this->description = $item['ads']['article'];
         $this->title = $item['name'];
         $this->address = $item['address_name'] . (array_key_exists('address_comment', $item) ? ', ' . $item['address_comment'] : '');
         $this->average_price = preg_replace('/[^0-9]/', '', $item['context']['stop_factors'][0]['name']);
-        $this->setContact($item['ads']['options']['actions'][0]);
         $this->setWorkHours($item['schedule']);
+        $this->content = "{$item['ads']['article']}<br><br>{$this->work_hours}<br><br>{$this->setContact($item['ads']['options']['actions'][0])}";
+        $this->date_start = date("d/m/Y");
+        $this->date_finish = date("d/m/Y"); //TODO: add a year
+        $this->featured_image = $fifu_image_url;
     }
 
-    private function setContact(array $contact): bool
+    /**
+     * Returns a string with phone url or site url
+     */
+    private function setContact(array $contact): string
     {
         $link = $contact['type'] == 'phone' ? "tel:{$contact['value']}" : (string)$contact['value'];
 
-        return $this->contact = "<a href='{$link}'>{$contact['caption']}</a>";
+        return "<a href='{$link}'>{$contact['caption']}</a>";
     }
 
     private function setWorkHours(array $shedule): void
