@@ -23,7 +23,7 @@ class Goodwin
         $this->content = $html_element->find('div[class=story]', 0)->plaintext . '<br><br>';
 
         //searches for date start and end
-        $this->featured_image = 'https://goodwincinema.ru' . $html_element->find('div[class=left]', 0)->find('img', 0)->src;
+        $this->featured_image = str_replace('mid', 'big', 'https://goodwincinema.ru' . $html_element->find('div[class=left]', 0)->find('img', 0)->src);
         foreach ($html_element->find('td[class=label]') as $element) {
             if ($element->plaintext == 'В прокате') {
                 $this->content .= 'В прокате: ' . $element->next_sibling()->plaintext;
